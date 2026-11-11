@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Photography 101</title>
+<style>
+:root{--bg:#f7f6f2;--card:#ffffff;--soft:#efede6;--text:#1f1e1b;--muted:#6b6a64;--line:#dcdad2;--accent:#2f6fd6;--accent-bg:#e6eefb;--warn:#a3561a;--warn-bg:#fbefe2;--good:#2f7a3a;--good-bg:#e7f3e6;--cone:#e8a33a}
+@media (prefers-color-scheme:dark){:root{--bg:#1b1b19;--card:#252523;--soft:#2f2f2c;--text:#ecebe6;--muted:#a3a29b;--line:#3d3d39;--accent:#7aa7f0;--accent-bg:#1e3150;--warn:#f0b07a;--warn-bg:#40291a;--good:#8fd19a;--good-bg:#1f3a22}}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.5}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 16px 48px}
+h1{font-size:24px;font-weight:600;margin:0}
+h2{font-size:17px;font-weight:600;margin:0 0 10px}
+h3{font-size:14px;font-weight:600;margin:0 0 4px}
+.sub{color:var(--muted);margin:4px 0 18px;font-size:15px}
+.layout{display:grid;grid-template-columns:330px minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:860px){.layout{grid-template-columns:minmax(0,1fr)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:16px}
+label.lbl{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+input[type=text],input[type=search],select{width:100%;font:inherit;font-size:15px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--text)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.err{color:var(--warn);font-size:13px;margin-top:4px}
+.hint{color:var(--muted);font-size:13px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+button{font:inherit;font-size:13px;padding:5px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--text);cursor:pointer}
+button:hover{background:var(--soft)}
+button.on{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
+.lenslist{max-height:520px;overflow:auto;margin:0 -6px;padding:0 6px}
+.lensbtn{display:block;width:100%;text-align:left;padding:8px 10px;margin-bottom:6px;border-radius:8px}
+.lensbtn .nm{font-weight:600;font-size:13.5px}
+.lensbtn .sp{color:var(--muted);font-size:12.5px}
+.badge{display:inline-block;font-size:11px;padding:1px 6px;border-radius:6px;background:var(--soft);color:var(--muted);margin-left:6px;vertical-align:1px}
+.lenshead{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:baseline}
+.lenshead .big{font-size:19px;font-weight:600}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.fact{background:var(--soft);border-radius:8px;padding:4px 10px;font-size:13px}
+.ctl{display:grid;grid-template-columns:110px minmax(0,1fr) 92px;gap:10px;align-items:center;margin:10px 0}
+.ctl .v{font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+.ctl .n{font-size:14px;color:var(--muted)}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 6px 120px}
+@media (max-width:560px){.ctl{grid-template-columns:80px minmax(0,1fr) 80px}.presets{margin-left:0}}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:10px}
+.metric{background:var(--soft);border-radius:10px;padding:10px 12px}
+.metric .k{font-size:12.5px;color:var(--muted)}
+.metric .val{font-size:21px;font-weight:600;font-variant-numeric:tabular-nums}
+.metric .s{font-size:12px;color:var(--muted)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.view svg{width:100%;height:auto;display:block;border-radius:8px}
+.cap{font-size:13px;color:var(--muted);margin-top:6px}
+.note{border-radius:8px;padding:8px 12px;font-size:13.5px;margin-top:10px}
+.note.warn{background:var(--warn-bg);color:var(--warn)}
+.note.good{background:var(--good-bg);color:var(--good)}
+ul.why{margin:0;padding-left:18px}
+ul.why li{margin:6px 0}
+.learn{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.learn .item{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:13.5px}
+.diag text{font-family:inherit}
+
+.lensbar{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) minmax(0,1fr);gap:4px 14px;align-items:start}
+.lensbar .lbl{margin-top:0}
+@media (max-width:860px){.lensbar{grid-template-columns:minmax(0,1fr)}}
+.layout2{display:grid;grid-template-columns:250px minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:860px){.layout2{grid-template-columns:minmax(0,1fr)}.modnav{display:flex;flex-wrap:wrap;gap:6px;position:static}.modnav .modbtn{width:auto}.modnav .hint,.modnav .progress{width:100%}}
+.modnav{position:sticky;top:12px}
+.modbtn{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:none;background:none;padding:7px 8px;margin:2px 0;font-size:14px}
+.modbtn.on{background:var(--accent-bg);color:var(--accent)}
+.num{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--soft);font-size:12px;font-weight:600;flex:none}
+.num.ok{background:var(--good-bg);color:var(--good)}
+.progress{height:6px;border-radius:3px;background:var(--soft);margin-bottom:10px;overflow:hidden}
+.progress span{display:block;height:100%;background:var(--good);transition:width .3s}
+.reset{margin-top:10px;font-size:12px;color:var(--muted)}
+.idea{background:var(--accent-bg);border-radius:8px;padding:8px 12px;font-size:14px}
+.ctl select{font-size:14px;padding:6px 8px}
+ol.tasks{list-style:none;padding:0;margin:8px 0 16px}
+ol.tasks li{display:flex;gap:10px;align-items:flex-start;padding:8px 10px;border-radius:8px;margin-bottom:6px;background:var(--soft);font-size:14.5px}
+ol.tasks li.done{background:var(--good-bg);color:var(--good)}
+ol.tasks li.locked{opacity:.55}
+ol.tasks li.active{outline:2px solid var(--accent)}
+.tick{flex:none;width:20px;height:20px;border-radius:50%;border:1.5px solid currentColor;display:inline-flex;align-items:center;justify-content:center;font-size:12px;margin-top:1px}
+.quiz{border-top:1px solid var(--line);padding-top:12px}
+.opts{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.opts button{text-align:left;font-size:14px}
+.opts button.right{background:var(--good-bg);border-color:var(--good);color:var(--good)}
+.opts button.wrong{background:var(--warn-bg);border-color:var(--warn);color:var(--warn)}
+.navbtns{display:flex;justify-content:space-between;margin-bottom:16px}
+.navbtns button{font-size:14px;padding:8px 14px}
+.navbtns button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+button:disabled{opacity:.4;cursor:default}
+svg.diag{width:100%;max-width:520px;height:auto;display:block}
+footer{color:var(--muted);font-size:12.5px;margin-top:8px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>!function(e,n){"object"==typeof exports&&"undefined"!=typeof module?n(exports):"function"==typeof define&&define.amd?define(["exports"],n):n(e.htmPreact={})}(this,function(e){var n,_,t,o,r,u,l,i={},c=[],f=/acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i;function s(e,n){for(var _ in n)e[_]=n[_];return e}function a(e){var n=e.parentNode;n&&n.removeChild(e)}function p(e,_,t){var o,r,u,l={};for(u in _)"key"==u?o=_[u]:"ref"==u?r=_[u]:l[u]=_[u];if(arguments.length>2&&(l.children=arguments.length>3?n.call(arguments,2):t),"function"==typeof e&&null!=e.defaultProps)for(u in e.defaultProps)void 0===l[u]&&(l[u]=e.defaultProps[u]);return h(e,l,o,r,null)}function h(e,n,o,r,u){var l={type:e,props:n,key:o,ref:r,__k:null,__:null,__b:0,__e:null,__d:void 0,__c:null,__h:null,constructor:void 0,__v:null==u?++t:u};return null!=_.vnode&&_.vnode(l),l}function d(e){return e.children}function v(e,n){this.props=e,this.context=n}function y(e,n){if(null==n)return e.__?y(e.__,e.__.__k.indexOf(e)+1):null;for(var _;n<e.__k.length;n++)if(null!=(_=e.__k[n])&&null!=_.__e)return _.__e;return"function"==typeof e.type?y(e):null}function m(e){var n,_;if(null!=(e=e.__)&&null!=e.__c){for(e.__e=e.__c.base=null,n=0;n<e.__k.length;n++)if(null!=(_=e.__k[n])&&null!=_.__e){e.__e=e.__c.base=_.__e;break}return m(e)}}function g(e){(!e.__d&&(e.__d=!0)&&o.push(e)&&!k.__r++||u!==_.debounceRendering)&&((u=_.debounceRendering)||r)(k)}function k(){for(var e;k.__r=o.length;)e=o.sort(function(e,n){return e.__v.__b-n.__v.__b}),o=[],e.some(function(e){var n,_,t,o,r,u;e.__d&&(r=(o=(n=e).__v).__e,(u=n.__P)&&(_=[],(t=s({},o)).__v=o.__v+1,D(u,o,t,n.__n,void 0!==u.ownerSVGElement,null!=o.__h?[r]:null,_,null==r?y(o):r,o.__h),w(_,o),o.__e!=r&&m(o)))})}function b(e,n,_,t,o,r,u,l,f,s){var a,p,v,m,g,k,b,H=t&&t.__k||c,E=H.length;for(_.__k=[],a=0;a<n.length;a++)if(null!=(m=_.__k[a]=null==(m=n[a])||"boolean"==typeof m?null:"string"==typeof m||"number"==typeof m||"bigint"==typeof m?h(null,m,null,null,m):Array.isArray(m)?h(d,{children:m},null,null,null):m.__b>0?h(m.type,m.props,m.key,null,m.__v):m)){if(m.__=_,m.__b=_.__b+1,null===(v=H[a])||v&&m.key==v.key&&m.type===v.type)H[a]=void 0;else for(p=0;p<E;p++){if((v=H[p])&&m.key==v.key&&m.type===v.type){H[p]=void 0;break}v=null}D(e,m,v=v||i,o,r,u,l,f,s),g=m.__e,(p=m.ref)&&v.ref!=p&&(b||(b=[]),v.ref&&b.push(v.ref,null,m),b.push(p,m.__c||g,m)),null!=g?(null==k&&(k=g),"function"==typeof m.type&&null!=m.__k&&m.__k===v.__k?m.__d=f=C(m,f,e):f=x(e,m,v,H,g,f),s||"option"!==_.type?"function"==typeof _.type&&(_.__d=f):e.value=""):f&&v.__e==f&&f.parentNode!=e&&(f=y(v))}for(_.__e=k,a=E;a--;)null!=H[a]&&("function"==typeof _.type&&null!=H[a].__e&&H[a].__e==_.__d&&(_.__d=y(t,a+1)),A(H[a],H[a]));if(b)for(a=0;a<b.length;a++)U(b[a],b[++a],b[++a])}function C(e,n,_){var t,o;for(t=0;t<e.__k.length;t++)(o=e.__k[t])&&(o.__=e,n="function"==typeof o.type?C(o,n,_):x(_,o,o,e.__k,o.__e,n));return n}function x(e,n,_,t,o,r){var u,l,i;if(void 0!==n.__d)u=n.__d,n.__d=void 0;else if(null==_||o!=r||null==o.parentNode)e:if(null==r||r.parentNode!==e)e.appendChild(o),u=null;else{for(l=r,i=0;(l=l.nextSibling)&&i<t.length;i+=2)if(l==o)break e;e.insertBefore(o,r),u=r}return void 0!==u?u:o.nextSibling}function H(e,n,_){"-"===n[0]?e.setProperty(n,_):e[n]=null==_?"":"number"!=typeof _||f.test(n)?_:_+"px"}function E(e,n,_,t,o){var r;e:if("style"===n)if("string"==typeof _)e.style.cssText=_;else{if("string"==typeof t&&(e.style.cssText=t=""),t)for(n in t)_&&n in _||H(e.style,n,"");if(_)for(n in _)t&&_[n]===t[n]||H(e.style,n,_[n])}else if("o"===n[0]&&"n"===n[1])r=n!==(n=n.replace(/Capture$/,"")),n=n.toLowerCase()in e?n.toLowerCase().slice(2):n.slice(2),e.l||(e.l={}),e.l[n+r]=_,_?t||e.addEventListener(n,r?S:P,r):e.removeEventListener(n,r?S:P,r);else if("dangerouslySetInnerHTML"!==n){if(o)n=n.replace(/xlink[H:h]/,"h").replace(/sName$/,"s");else if("href"!==n&&"list"!==n&&"form"!==n&&"tabIndex"!==n&&"download"!==n&&n in e)try{e[n]=null==_?"":_;break e}catch(e){}"function"==typeof _||(null!=_&&(!1!==_||"a"===n[0]&&"r"===n[1])?e.setAttribute(n,_):e.removeAttribute(n))}}function P(e){this.l[e.type+!1](_.event?_.event(e):e)}function S(e){this.l[e.type+!0](_.event?_.event(e):e)}function D(e,n,t,o,r,u,l,i,c){var f,a,p,h,y,m,g,k,C,x,H,E=n.type;if(void 0!==n.constructor)return null;null!=t.__h&&(c=t.__h,i=n.__e=t.__e,n.__h=null,u=[i]),(f=_.__b)&&f(n);try{e:if("function"==typeof E){if(k=n.props,C=(f=E.contextType)&&o[f.__c],x=f?C?C.props.value:f.__:o,t.__c?g=(a=n.__c=t.__c).__=a.__E:("prototype"in E&&E.prototype.render?n.__c=a=new E(k,x):(n.__c=a=new v(k,x),a.constructor=E,a.render=M),C&&C.sub(a),a.props=k,a.state||(a.state={}),a.context=x,a.__n=o,p=a.__d=!0,a.__h=[]),null==a.__s&&(a.__s=a.state),null!=E.getDerivedStateFromProps&&(a.__s==a.state&&(a.__s=s({},a.__s)),s(a.__s,E.getDerivedStateFromProps(k,a.__s))),h=a.props,y=a.state,p)null==E.getDerivedStateFromProps&&null!=a.componentWillMount&&a.componentWillMount(),null!=a.componentDidMount&&a.__h.push(a.componentDidMount);else{if(null==E.getDerivedStateFromProps&&k!==h&&null!=a.componentWillReceiveProps&&a.componentWillReceiveProps(k,x),!a.__e&&null!=a.shouldComponentUpdate&&!1===a.shouldComponentUpdate(k,a.__s,x)||n.__v===t.__v){a.props=k,a.state=a.__s,n.__v!==t.__v&&(a.__d=!1),a.__v=n,n.__e=t.__e,n.__k=t.__k,n.__k.forEach(function(e){e&&(e.__=n)}),a.__h.length&&l.push(a);break e}null!=a.componentWillUpdate&&a.componentWillUpdate(k,a.__s,x),null!=a.componentDidUpdate&&a.__h.push(function(){a.componentDidUpdate(h,y,m)})}a.context=x,a.props=k,a.state=a.__s,(f=_.__r)&&f(n),a.__d=!1,a.__v=n,a.__P=e,f=a.render(a.props,a.state,a.context),a.state=a.__s,null!=a.getChildContext&&(o=s(s({},o),a.getChildContext())),p||null==a.getSnapshotBeforeUpdate||(m=a.getSnapshotBeforeUpdate(h,y)),H=null!=f&&f.type===d&&null==f.key?f.props.children:f,b(e,Array.isArray(H)?H:[H],n,t,o,r,u,l,i,c),a.base=n.__e,n.__h=null,a.__h.length&&l.push(a),g&&(a.__E=a.__=null),a.__e=!1}else null==u&&n.__v===t.__v?(n.__k=t.__k,n.__e=t.__e):n.__e=T(t.__e,n,t,o,r,u,l,c);(f=_.diffed)&&f(n)}catch(e){n.__v=null,(c||null!=u)&&(n.__e=i,n.__h=!!c,u[u.indexOf(i)]=null),_.__e(e,n,t)}}function w(e,n){_.__c&&_.__c(n,e),e.some(function(n){try{e=n.__h,n.__h=[],e.some(function(e){e.call(n)})}catch(e){_.__e(e,n.__v)}})}function T(e,_,t,o,r,u,l,c){var f,s,p,h=t.props,d=_.props,v=_.type,m=0;if("svg"===v&&(r=!0),null!=u)for(;m<u.length;m++)if((f=u[m])&&(f===e||(v?f.localName==v:3==f.nodeType))){e=f,u[m]=null;break}if(null==e){if(null===v)return document.createTextNode(d);e=r?document.createElementNS("http://www.w3.org/2000/svg",v):document.createElement(v,d.is&&d),u=null,c=!1}if(null===v)h===d||c&&e.data===d||(e.data=d);else{if(u=u&&n.call(e.childNodes),s=(h=t.props||i).dangerouslySetInnerHTML,p=d.dangerouslySetInnerHTML,!c){if(null!=u)for(h={},m=0;m<e.attributes.length;m++)h[e.attributes[m].name]=e.attributes[m].value;(p||s)&&(p&&(s&&p.__html==s.__html||p.__html===e.innerHTML)||(e.innerHTML=p&&p.__html||""))}if(function(e,n,_,t,o){var r;for(r in _)"children"===r||"key"===r||r in n||E(e,r,null,_[r],t);for(r in n)o&&"function"!=typeof n[r]||"children"===r||"key"===r||"value"===r||"checked"===r||_[r]===n[r]||E(e,r,n[r],_[r],t)}(e,d,h,r,c),p)_.__k=[];else if(m=_.props.children,b(e,Array.isArray(m)?m:[m],_,t,o,r&&"foreignObject"!==v,u,l,u?u[0]:t.__k&&y(t,0),c),null!=u)for(m=u.length;m--;)null!=u[m]&&a(u[m]);c||("value"in d&&void 0!==(m=d.value)&&(m!==e.value||"progress"===v&&!m)&&E(e,"value",m,h.value,!1),"checked"in d&&void 0!==(m=d.checked)&&m!==e.checked&&E(e,"checked",m,h.checked,!1))}return e}function U(e,n,t){try{"function"==typeof e?e(n):e.current=n}catch(e){_.__e(e,t)}}function A(e,n,t){var o,r;if(_.unmount&&_.unmount(e),(o=e.ref)&&(o.current&&o.current!==e.__e||U(o,null,n)),null!=(o=e.__c)){if(o.componentWillUnmount)try{o.componentWillUnmount()}catch(e){_.__e(e,n)}o.base=o.__P=null}if(o=e.__k)for(r=0;r<o.length;r++)o[r]&&A(o[r],n,"function"!=typeof e.type);t||null==e.__e||a(e.__e),e.__e=e.__d=void 0}function M(e,n,_){return this.constructor(e,_)}n=c.slice,_={__e:function(e,n){for(var _,t,o;n=n.__;)if((_=n.__c)&&!_.__)try{if((t=_.constructor)&&null!=t.getDerivedStateFromError&&(_.setState(t.getDerivedStateFromError(e)),o=_.__d),null!=_.componentDidCatch&&(_.componentDidCatch(e),o=_.__d),o)return _.__E=_}catch(n){e=n}throw e}},t=0,v.prototype.setState=function(e,n){var _;_=null!=this.__s&&this.__s!==this.state?this.__s:this.__s=s({},this.state),"function"==typeof e&&(e=e(s({},_),this.props)),e&&s(_,e),null!=e&&this.__v&&(n&&this.__h.push(n),g(this))},v.prototype.forceUpdate=function(e){this.__v&&(this.__e=!0,e&&this.__h.push(e),g(this))},v.prototype.render=d,o=[],r="function"==typeof Promise?Promise.prototype.then.bind(Promise.resolve()):setTimeout,k.__r=0,l=0;var F,L,N,W=0,R=[],I=_.__b,O=_.__r,V=_.diffed,q=_.__c,B=_.unmount;function $(e,n){_.__h&&_.__h(L,e,W||n),W=0;var t=L.__H||(L.__H={__:[],__h:[]});return e>=t.__.length&&t.__.push({}),t.__[e]}function j(e){return W=1,G(ee,e)}function G(e,n,_){var t=$(F++,2);return t.t=e,t.__c||(t.__=[_?_(n):ee(void 0,n),function(e){var n=t.t(t.__[0],e);t.__[0]!==n&&(t.__=[n,t.__[1]],t.__c.setState({}))}],t.__c=L),t.__}function z(e,n){var t=$(F++,4);!_.__s&&Z(t.__H,n)&&(t.__=e,t.__H=n,L.__h.push(t))}function J(e,n){var _=$(F++,7);return Z(_.__H,n)&&(_.__=e(),_.__H=n,_.__h=e),_.__}function K(){R.forEach(function(e){if(e.__P)try{e.__H.__h.forEach(X),e.__H.__h.forEach(Y),e.__H.__h=[]}catch(n){e.__H.__h=[],_.__e(n,e.__v)}}),R=[]}_.__b=function(e){L=null,I&&I(e)},_.__r=function(e){O&&O(e),F=0;var n=(L=e.__c).__H;n&&(n.__h.forEach(X),n.__h.forEach(Y),n.__h=[])},_.diffed=function(e){V&&V(e);var n=e.__c;n&&n.__H&&n.__H.__h.length&&(1!==R.push(n)&&N===_.requestAnimationFrame||((N=_.requestAnimationFrame)||function(e){var n,_=function(){clearTimeout(t),Q&&cancelAnimationFrame(n),setTimeout(e)},t=setTimeout(_,100);Q&&(n=requestAnimationFrame(_))})(K)),L=void 0},_.__c=function(e,n){n.some(function(e){try{e.__h.forEach(X),e.__h=e.__h.filter(function(e){return!e.__||Y(e)})}catch(t){n.some(function(e){e.__h&&(e.__h=[])}),n=[],_.__e(t,e.__v)}}),q&&q(e,n)},_.unmount=function(e){B&&B(e);var n=e.__c;if(n&&n.__H)try{n.__H.__.forEach(X)}catch(e){_.__e(e,n.__v)}};var Q="function"==typeof requestAnimationFrame;function X(e){var n=L;"function"==typeof e.__c&&e.__c(),L=n}function Y(e){var n=L;e.__c=e.__(),L=n}function Z(e,n){return!e||e.length!==n.length||n.some(function(n,_){return n!==e[_]})}function ee(e,n){return"function"==typeof n?n(e):n}var ne=function(e,n,_,t){var o;n[0]=0;for(var r=1;r<n.length;r++){var u=n[r++],l=n[r]?(n[0]|=u?1:2,_[n[r++]]):n[++r];3===u?t[0]=l:4===u?t[1]=Object.assign(t[1]||{},l):5===u?(t[1]=t[1]||{})[n[++r]]=l:6===u?t[1][n[++r]]+=l+"":u?(o=e.apply(l,ne(e,l,_,["",null])),t.push(o),l[0]?n[0]|=2:(n[r-2]=0,n[r]=o)):t.push(l)}return t},_e=new Map,te=function(e){var n=_e.get(this);return n||(n=new Map,_e.set(this,n)),(n=ne(this,n.get(e)||(n.set(e,n=function(e){for(var n,_,t=1,o="",r="",u=[0],l=function(e){1===t&&(e||(o=o.replace(/^\s*\n\s*|\s*\n\s*$/g,"")))?u.push(0,e,o):3===t&&(e||o)?(u.push(3,e,o),t=2):2===t&&"..."===o&&e?u.push(4,e,0):2===t&&o&&!e?u.push(5,0,!0,o):t>=5&&((o||!e&&5===t)&&(u.push(t,0,o,_),t=6),e&&(u.push(t,e,0,_),t=6)),o=""},i=0;i<e.length;i++){i&&(1===t&&l(),l(i));for(var c=0;c<e[i].length;c++)n=e[i][c],1===t?"<"===n?(l(),u=[u],t=3):o+=n:4===t?"--"===o&&">"===n?(t=1,o=""):o=n+o[0]:r?n===r?r="":o+=n:'"'===n||"'"===n?r=n:">"===n?(l(),t=1):t&&("="===n?(t=5,_=o,o=""):"/"===n&&(t<5||">"===e[i][c+1])?(l(),3===t&&(u=u[0]),t=u,(u=u[0]).push(2,0,t),t=0):" "===n||"\t"===n||"\n"===n||"\r"===n?(l(),t=2):o+=n),3===t&&"!--"===o&&(t=4,u=u[0])}return l(),u}(e)),n),arguments,[])).length>1?n:n[0]}.bind(p);e.h=p,e.html=te,e.render=function(e,t,o){var r,u,l;_.__&&_.__(e,t),u=(r="function"==typeof o)?null:o&&o.__k||t.__k,l=[],D(t,e=(!r&&o||t).__k=p(d,null,[e]),u||i,i,void 0!==t.ownerSVGElement,!r&&o?[o]:u?null:t.firstChild?n.call(t.childNodes):null,l,!r&&o?o:u?u.__e:t.firstChild,r),w(l,e)},e.Component=v,e.createContext=function(e,n){var _={__c:n="__cC"+l++,__:e,Consumer:function(e,n){return e.children(n)},Provider:function(e){var _,t;return this.getChildContext||(_=[],(t={})[n]=this,this.getChildContext=function(){return t},this.shouldComponentUpdate=function(e){this.props.value!==e.value&&_.some(g)},this.sub=function(e){_.push(e);var n=e.componentWillUnmount;e.componentWillUnmount=function(){_.splice(_.indexOf(e),1),n&&n.call(e)}}),e.children}};return _.Provider.__=_.Consumer.contextType=_},e.useState=j,e.useReducer=G,e.useEffect=function(e,n){var t=$(F++,3);!_.__s&&Z(t.__H,n)&&(t.__=e,t.__H=n,L.__H.__h.push(t))},e.useLayoutEffect=z,e.useRef=function(e){return W=5,J(function(){return{current:e}},[])},e.useImperativeHandle=function(e,n,_){W=6,z(function(){"function"==typeof e?e(n()):e&&(e.current=n())},null==_?_:_.concat(e))},e.useMemo=J,e.useCallback=function(e,n){return W=8,J(function(){return e},n)},e.useContext=function(e){var n=L.context[e.__c],_=$(F++,9);return _.c=e,n?(null==_.__&&(_.__=!0,n.sub(L)),n.props.value):e.__},e.useDebugValue=function(e,n){_.useDebugValue&&_.useDebugValue(n?n(e):e)},e.useErrorBoundary=function(e){var n=$(F++,10),_=j();return n.__=e,L.componentDidCatch||(L.componentDidCatch=function(e){n.__&&n.__(e),_[1](e)}),[_[0],function(){_[1](void 0)}]}});
+</script>
+<script>
+const {html, render, useState, useMemo, useEffect} = htmPreact;
+
+const SENSORS = [
+  {id:'ff', name:'Full frame (36×24mm)', w:36, h:24, fmt:'FF'},
+  {id:'apsc', name:'APS-C: Nikon, Sony, Fujifilm (1.5×)', w:23.5, h:15.6, fmt:'APS-C'},
+  {id:'canon', name:'APS-C: Canon (1.6×)', w:22.3, h:14.9, fmt:'APS-C'},
+  {id:'mft', name:'Micro Four Thirds (2×)', w:17.3, h:13, fmt:'MFT'},
+  {id:'one', name:'1-inch (2.7×)', w:13.2, h:8.8, fmt:'1"'},
+].map(s => ({...s, crop: 43.27 / Math.hypot(s.w, s.h)}));
+
+const STD = [1,1.1,1.2,1.4,1.6,1.8,2,2.2,2.5,2.8,3.2,3.5,4,4.5,5,5.6,6.3,7.1,8,9,10,11,13,14,16,18,20,22];
+const SHUT = [8000,6400,5000,4000,3200,2500,2000,1600,1250,1000,800,640,500,400,320,250,200,160,125,100,80,60,50,40,30,25,20,15,13,10,8,6,5,4,3,2.5,2,1.6,1.3,1];
+const ISOS = [100,125,160,200,250,320,400,500,640,800,1000,1250,1600,2000,2500,3200,4000,5000,6400,8000,10000,12800,16000,20000,25600,32000,40000,51200];
+const LIGHT = [
+  {id:'sun', name:'Bright sun', ev:15},
+  {id:'overcast', name:'Overcast day', ev:12},
+  {id:'shade', name:'Open shade', ev:11},
+  {id:'bright-in', name:'Bright indoor room', ev:8},
+  {id:'home', name:'Home in the evening', ev:6},
+  {id:'night', name:'Lit street at night', ev:4},
+];
+const CATS = [['all','All'],['super','Superzoom'],['std','Standard and kit'],['tele','Telephoto'],['prime','Prime'],['wide','Wide']];
+
+// [name, category, format, has stabilization, aperture breakpoints [from focal, f-number]]
+const RAW = [
+  ['Sigma 18-200mm F3.5-6.3 DC','super','APS-C',0],
+  ['Sigma 18-200mm F3.5-6.3 II DC OS HSM','super','APS-C',1],
+  ['Tamron 18-200mm F3.5-6.3 Di III VC','super','APS-C',1],
+  ['Nikon AF-S DX 18-200mm f/3.5-5.6G ED VR II','super','APS-C',1],
+  ['Canon EF-S 18-200mm f/3.5-5.6 IS','super','APS-C',1],
+  ['Sony E 18-200mm F3.5-6.3 OSS','super','APS-C',1],
+  ['Tamron 18-270mm F3.5-6.3 Di II VC PZD','super','APS-C',1],
+  ['Sigma 18-300mm F3.5-6.3 DC Macro OS HSM','super','APS-C',1],
+  ['Tamron 18-400mm F3.5-6.3 Di II VC HLD','super','APS-C',1],
+  ['Canon RF-S 18-150mm F3.5-6.3 IS STM','super','APS-C',1],
+  ['Nikon Z DX 18-140mm f/3.5-6.3 VR','super','APS-C',1],
+  ['Sony E 18-135mm F3.5-5.6 OSS','super','APS-C',1],
+  ['Fujifilm XF 18-135mm F3.5-5.6 R LM OIS WR','super','APS-C',1],
+  ['Sony FE 24-240mm F3.5-6.3 OSS','super','FF',1],
+  ['Nikon Z 28-400mm f/4-8 VR','super','FF',1],
+  ['OM System M.Zuiko 12-200mm F3.5-6.3','super','MFT',0],
+  ['Olympus M.Zuiko 14-150mm F4-5.6 II','super','MFT',0],
+  ['Panasonic Lumix G Vario 14-140mm F3.5-5.6 II Power OIS','super','MFT',1],
+  ['Canon EF-S 18-55mm f/3.5-5.6 IS STM','std','APS-C',1],
+  ['Nikon AF-P DX 18-55mm f/3.5-5.6G VR','std','APS-C',1],
+  ['Sony E PZ 16-50mm F3.5-5.6 OSS II','std','APS-C',1],
+  ['Fujifilm XF 18-55mm F2.8-4 R LM OIS','std','APS-C',1],
+  ['Fujifilm XF 18-120mm F4 LM PZ WR','std','APS-C',0],
+  ['Sigma 18-50mm F2.8 DC DN Contemporary','std','APS-C',0],
+  ['Sigma 18-35mm F1.8 DC HSM Art','std','APS-C',0],
+  ['Canon RF 24-50mm F4.5-6.3 IS STM','std','FF',1],
+  ['Nikon Z 24-50mm f/4-6.3','std','FF',0],
+  ['Canon RF 24-105mm F4 L IS USM','std','FF',1],
+  ['Sony FE 24-105mm F4 G OSS','std','FF',1],
+  ['Nikon Z 24-120mm f/4 S','std','FF',0],
+  ['Sony FE 24-70mm F2.8 GM','std','FF',0],
+  ['Tamron 28-75mm F2.8 Di III VXD G2','std','FF',0],
+  ['Tamron 35-150mm F2-2.8 Di III VXD','std','FF',0],
+  ['Canon EF 75-300mm f/4-5.6 III','tele','FF',0],
+  ['Nikon AF-S DX 55-200mm f/4-5.6G ED','tele','APS-C',0],
+  ['Fujifilm XF 55-200mm F3.5-4.8 R LM OIS','tele','APS-C',1],
+  ['Nikon Z DX 50-250mm f/4.5-6.3 VR','tele','APS-C',1],
+  ['Panasonic Lumix G Vario 45-200mm F4-5.6 II Power OIS','tele','MFT',1],
+  ['Panasonic Lumix S 70-300mm F4.5-5.6 Macro OIS','tele','FF',1],
+  ['Canon RF 70-200mm F2.8 L IS USM','tele','FF',1],
+  ['Fujifilm XF 100-400mm F4.5-5.6 R LM OIS WR','tele','APS-C',1],
+  ['Tamron 150-500mm F5-6.7 Di III VC VXD','tele','FF',1,[[150,5],[242,5.6],[390,6.3],[500,6.7]]],
+  ['Sigma 150-600mm F5-6.3 DG DN OS Sports','tele','FF',1,[[150,5],[174,5.6],[366,6.3]]],
+  ['Sony FE 200-600mm F5.6-6.3 G OSS','tele','FF',1,[[200,5.6],[300,6.3]]],
+  ['Nikon Z 180-600mm f/5.6-6.3 VR','tele','FF',1],
+  ['Canon RF 28mm F2.8 STM','prime','FF',0],
+  ['Nikon Z DX 24mm f/1.7','prime','APS-C',0],
+  ['Fujifilm XF 23mm F1.4 R LM WR','prime','APS-C',0],
+  ['Canon EF 50mm f/1.8 STM','prime','FF',0],
+  ['Canon RF 50mm F1.8 STM','prime','FF',0],
+  ['Canon RF 85mm F1.2 L USM','prime','FF',0],
+  ['Nikon Z 85mm f/1.2 S','prime','FF',0],
+  ['Canon RF 135mm F1.8 L IS USM','prime','FF',1],
+  ['Canon RF 10-20mm F4 L IS STM','wide','FF',1],
+  ['Nikon Z 14-30mm f/4 S','wide','FF',0],
+  ['Tokina AT-X Pro 11-20mm F2.8 DX','wide','APS-C',0],
+];
+
+function parseLens(text){
+  const t = String(text || '');
+  const fm = t.match(/(\d+(?:\.\d+)?)(?:\s*[-–]\s*(\d+(?:\.\d+)?))?\s*(?:mm?)?/i);
+  if (!fm) return null;
+  const f0 = +fm[1], f1 = fm[2] ? +fm[2] : f0;
+  const rest = t.slice(fm.index + fm[0].length);
+  const am = rest.match(/(?:f\s*\/?|1\s*:)\s*(\d+(?:\.\d+)?)(?:\s*[-–]\s*(\d+(?:\.\d+)?))?/i);
+  if (!am) return null;
+  const a0 = +am[1], a1 = am[2] ? +am[2] : a0;
+  if (!(f0 >= 4 && f1 >= f0 && f1 <= 2000 && a0 >= 0.95 && a1 >= a0 && a1 <= 16)) return null;
+  return {f:[f0,f1], a:[a0,a1]};
+}
+
+const LENSES = RAW.map(([n,cat,fmt,is,bp],i) => ({id:'l'+i, n, cat, fmt, is:!!is, bp, ...parseLens(n), brand:n.split(' ')[0]}));
+
+function sensorFor(lens, current){
+  if (lens.fmt === 'FF') return 'ff';
+  if (lens.fmt === 'MFT') return 'mft';
+  if (lens.fmt === 'APS-C') return lens.brand === 'Canon' ? 'canon' : 'apsc';
+  return current;
+}
+function nearestLog(list, x){ return list.reduce((p,c) => Math.abs(Math.log(c/x)) < Math.abs(Math.log(p/x)) ? c : p); }
+function maxApAt(lens, f){
+  if (lens.bp){ let N = lens.bp[0][1]; for (const [fs,n] of lens.bp) if (f >= fs) N = n; return {N, est:false}; }
+  const [f0,f1] = lens.f, [a0,a1] = lens.a;
+  if (f1 === f0 || a0 === a1 || f <= f0) return {N:a0, est:false};
+  if (f >= f1) return {N:a1, est:false};
+  const t = Math.log(f/f0) / Math.log(f1/f0);
+  const raw = a0 * Math.pow(a1/a0, t);
+  const cands = [a0, ...STD.filter(s => s > a0 + 0.01 && s < a1 - 0.01), a1];
+  return {N: nearestLog(cands, raw), est:true};
+}
+const fN = n => (Math.round(n*10)/10).toString();
+const stopsBetween = (n1, n2) => 2 * Math.log2(n2/n1);
+function fmtShutter(t){
+  if (t >= 1) return (t < 10 ? (Math.round(t*10)/10) : Math.round(t)) + 's';
+  return '1/' + nearestLog(SHUT, 1/t);
+}
+function fmtDist(m, fine){
+  if (!isFinite(m)) return '∞';
+  if (m < 0.1) return (Math.round(m*1000)/10) + 'cm';
+  if (m < 1) return Math.round(m*100) + 'cm';
+  if (fine) return (Math.round(m*100)/100) + 'm';
+  if (m < 10) return (Math.round(m*10)/10) + 'm';
+  return Math.round(m) + 'm';
+}
+function dof(fmm, N, sM, c){
+  const s = sM*1000, H = fmm*fmm/(N*c) + fmm;
+  const near = s*(H - fmm)/(H + s - 2*fmm);
+  const far = s < H ? s*(H - fmm)/(H - s) : Infinity;
+  return {near: near/1000, far: far/1000, H: H/1000};
+}
+function useLabel(eq){
+  if (eq < 21) return ['Ultra-wide','Huge landscapes, architecture, small rooms. Stretches things near the edges.'];
+  if (eq < 35) return ['Wide','Landscapes, street, travel scenes, groups.'];
+  if (eq < 70) return ['Normal','Close to how your eyes see. Everyday, street, food.'];
+  if (eq < 135) return ['Short telephoto','Classic portrait range. Flattering faces, details.'];
+  if (eq < 300) return ['Telephoto','Sports, events, distant details, compressed backgrounds.'];
+  return ['Super-telephoto','Wildlife and birds. Needs fast shutter speeds.'];
+}
+
+const logPos = (x, a, b) => Math.log(x/a) / Math.log(b/a);
+const logVal = (p, a, b) => a * Math.pow(b/a, p);
+
+/* ---------- Scene artwork (photo colours, same in light and dark) ---------- */
+function SceneBack(){
+  return html`<g>
+    <rect x="-400" y="-500" width="2000" height="1200" fill="#cfe6f7"/>
+    <circle cx="990" cy="120" r="44" fill="#f6d776"/>
+    <ellipse cx="300" cy="140" rx="90" ry="26" fill="#eef6fc"/><ellipse cx="360" cy="124" rx="60" ry="24" fill="#eef6fc"/>
+    <ellipse cx="760" cy="200" rx="70" ry="18" fill="#eef6fc"/>
+    <polygon points="-400,480 80,260 260,420 420,230 640,440 820,280 1000,430 1150,300 1600,480" fill="#9fb4cb"/>
+    <polygon points="420,230 380,268 460,268" fill="#f4f7fa"/><polygon points="820,280 790,308 852,308" fill="#f4f7fa"/>
+    <path d="M-400 520 Q 200 420 600 495 T 1600 485 V 1400 H -400 Z" fill="#8dbf7c"/>
+    <rect x="-400" y="560" width="2000" height="900" fill="#a6d08a"/>
+    <g><rect x="176" y="470" width="8" height="28" fill="#6b4f36"/><circle cx="180" cy="458" r="22" fill="#4f8a46"/>
+       <rect x="256" y="478" width="8" height="26" fill="#6b4f36"/><circle cx="260" cy="466" r="19" fill="#5b9750"/>
+       <rect x="1006" y="472" width="8" height="28" fill="#6b4f36"/><circle cx="1010" cy="458" r="24" fill="#4f8a46"/></g>
+    <g><rect x="830" y="456" width="60" height="40" fill="#e9d8c4"/><polygon points="822,458 860,430 898,458" fill="#b5654a"/>
+       <rect x="852" y="474" width="12" height="22" fill="#7a4b33"/><rect x="836" y="464" width="10" height="9" fill="#9cc3e4"/></g>
+  </g>`;
+}
+function SceneFront(){
+  return html`<g>
+    <rect x="380" y="468" width="440" height="7" fill="#9c7b57"/><rect x="380" y="515" width="440" height="7" fill="#9c7b57"/>
+    <rect x="394" y="430" width="12" height="150" fill="#8a6a4a"/><rect x="794" y="430" width="12" height="150" fill="#8a6a4a"/>
+    <rect x="594" y="421" width="12" height="160" fill="#8a6a4a"/>
+    <polygon points="590,414 579,419 590,419" fill="#5a4636"/>
+    <ellipse cx="598" cy="415" rx="8.5" ry="5.6" fill="#7b5b45"/>
+    <ellipse cx="600" cy="417" rx="5.5" ry="3.6" fill="#d9663f"/>
+    <circle cx="605.5" cy="409" r="4" fill="#5a4636"/>
+    <polygon points="609,408.3 612.6,409.4 609,410.4" fill="#e8a33a"/>
+    <circle cx="606.6" cy="408.2" r="0.8" fill="#111"/>
+    <line x1="597" y1="420" x2="597" y2="421.5" stroke="#3a2a1e" stroke-width="0.6"/><line x1="600" y1="420" x2="600" y2="421.5" stroke="#3a2a1e" stroke-width="0.6"/>
+    <rect x="462" y="520" width="7" height="56" rx="2" fill="#3a3f4a"/><rect x="473" y="520" width="7" height="56" rx="2" fill="#3a3f4a"/>
+    <rect x="456" y="468" width="30" height="56" rx="7" fill="#4f6fa8"/>
+    <rect x="449" y="472" width="8" height="40" rx="4" fill="#4f6fa8"/><rect x="485" y="472" width="8" height="40" rx="4" fill="#4f6fa8"/>
+    <circle cx="471" cy="452" r="13" fill="#e3b48f"/><path d="M458 449 Q 471 432 484 449 Q 476 442 458 449 Z" fill="#4a3426"/>
+    ${[[300,650,'#e5566b'],[340,665,'#f2c14e'],[720,655,'#e5566b'],[760,675,'#b678d9'],[560,690,'#f2c14e'],[640,700,'#e5566b']].map(([x,y,c]) =>
+      html`<g><line x1=${x} y1=${y} x2=${x} y2=${y+22} stroke="#4f8a46" stroke-width="2"/><circle cx=${x} cy=${y} r="6" fill=${c}/><circle cx=${x} cy=${y} r="2" fill="#fff3c4"/></g>`)}
+  </g>`;
+}
+const SCX = 598, SCY = 414, SW = 1200, REF_EQ = 14;
+function frameRect(eq, sensor){
+  const frac = Math.min(1, REF_EQ / eq);
+  const w = SW * frac, h = w * sensor.h / sensor.w;
+  return {x: SCX - w/2, y: SCY - h/2, w, h, frac};
+}
+
+/* ---------- Shared maths ---------- */
+const SHUT_S = [...SHUT.map(d => 1/d), 2, 4, 8, 15, 30].sort((a,b) => b - a); // slow → fast
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+const pct = x => (x < 1 ? x.toFixed(1) : Math.round(x)) + '%';
+
+function compute(st){
+  const lens = st.lens, sensor = SENSORS.find(s => s.id === st.sensorId);
+  const [f0, f1] = lens.f;
+  const f = clamp(st.focal, f0, f1);
+  const {N: maxN, est} = maxApAt(lens, f);
+  const apOptions = [maxN, ...STD.filter(s => s > maxN + 0.01)];
+  const N = st.userN && st.userN >= maxN ? nearestLog(apOptions, st.userN) : maxN;
+  const crop = sensor.crop, eq = f * crop;
+  const hfov = 2*Math.atan(sensor.w/(2*f))*180/Math.PI;
+  const dfov = 2*Math.atan(Math.hypot(sensor.w, sensor.h)/(2*f))*180/Math.PI;
+  const coc = Math.hypot(sensor.w, sensor.h) / 1442;
+  const D = dof(f, N, st.dist, coc);
+  const depth = D.far - D.near;
+  const fine = depth < 1;
+  const fd = m => fmtDist(m, fine);
+  const blurMm = st.dist*1000 > f ? f*f / (N * (st.dist*1000 - f)) : 0;
+  const blurPct = blurMm / sensor.w * 100;
+  const safeBase = 1/eq, safeT = safeBase * Math.pow(2, st.isStops);
+  const light = LIGHT.find(l => l.id === st.lightId);
+  const t100 = N*N / Math.pow(2, light.ev);
+  let autoIso = 100, autoT = t100;
+  if (t100 > safeT){ autoIso = ISOS.find(i => i >= 100 * t100 / safeT) || 51200; autoT = t100 * 100 / autoIso; }
+  const err = Math.log2(st.shut * (st.iso/100) * Math.pow(2, light.ev) / (N*N));
+  const fr = frameRect(eq, sensor);
+  return {lens, sensor, f0, f1, f, maxN, est, apOptions, N, crop, eq, hfov, dfov, coc, D, depth, fd,
+          blurMm, blurPct, safeBase, safeT, light, autoIso, autoT, err, fr,
+          shut: st.shut, iso: st.iso, isStops: st.isStops, dist: st.dist, sensorId: st.sensorId, lightId: st.lightId};
+}
+
+/* feasibility helpers so every task can be done with whatever lens is loaded */
+function focalSamples(lens){ const [a,b] = lens.f; if (a === b) return [a]; return Array.from({length: 61}, (_, i) => Math.round(logVal(i/60, a, b))); }
+function maxBlurPct(lens, sensor){ return Math.max(...focalSamples(lens).map(f => f*f / (maxApAt(lens, f).N * (500 - f)) / sensor.w * 100)); }
+function minDepth(lens, sensor){
+  const c = Math.hypot(sensor.w, sensor.h) / 1442;
+  return Math.min(...focalSamples(lens).map(f => { const d = dof(f, maxApAt(lens, f).N, 0.5, c); return d.far - d.near; }));
+}
+function minHyperNear(lens, sensor){
+  const c = Math.hypot(sensor.w, sensor.h) / 1442, f = lens.f[0];
+  return (f*f/(22*c) + f) / 2000;
+}
+function niceUp(x){ const s = [0.05,0.1,0.2,0.3,0.5,1,2,3,5,10,20,50]; return s.find(v => v >= x) || Math.ceil(x); }
+function slowestSafe(limit){ return SHUT_S.find(t => t <= limit * 1.06); }
+
+/* ---------- Visual pieces ---------- */
+function SceneView({S}){
+  const fr = S.fr;
+  return html`<div class="view"><h3>The scene</h3>
+    <svg viewBox="0 0 1200 800" role="img" aria-label="Wide scene with a box showing what the lens captures">
+      <${SceneBack}/><${SceneFront}/>
+      <rect x=${fr.x} y=${fr.y} width=${fr.w} height=${fr.h} fill="none" stroke="#e8a33a" stroke-width=${Math.max(3, fr.w/120)}/>
+      ${fr.w < 60 ? html`<circle cx=${SCX} cy=${SCY} r="34" fill="none" stroke="#e8a33a" stroke-width="3" stroke-dasharray="8 6"/>` : ''}
+    </svg>
+    <div class="cap">Orange box = what ${Math.round(S.eq)}mm (full-frame equivalent) captures.</div></div>`;
+}
+
+function PreviewView({S, blur = true, shake = false, expose = false, title = 'What your camera sees'}){
+  const fr = S.fr;
+  const blurSd = blur ? Math.min(60, (S.blurMm / S.sensor.w) * fr.w / 2.2) : 0;
+  const ratio = S.shut / S.safeT;
+  const shakeSd = shake && ratio > 1 ? Math.min(fr.w * 0.04, fr.w * 0.003 * ratio) : 0;
+  const bright = expose ? clamp(Math.pow(2, S.err), 0.12, 3.2) : 1;
+  const grain = expose ? clamp((Math.log2(S.iso/100) - 2) / 7, 0, 0.55) : 0;
+  return html`<div class="view"><h3>${title}</h3>
+    <div style=${`filter:brightness(${bright.toFixed(2)});border-radius:8px;overflow:hidden`}>
+    <svg viewBox=${`${fr.x} ${fr.y} ${fr.w} ${fr.h}`} role="img" aria-label="Simulated photo">
+      <defs>
+        <filter id="bgblur" x="-0.2" y="-0.2" width="1.4" height="1.4"><feGaussianBlur stdDeviation=${blurSd.toFixed(2)}/></filter>
+        <filter id="shake" x="-0.2" y="-0.2" width="1.4" height="1.4"><feGaussianBlur stdDeviation=${`${shakeSd.toFixed(2)} ${(shakeSd*0.35).toFixed(2)}`}/></filter>
+        <filter id="grain" x="0" y="0" width="1" height="1" filterUnits="objectBoundingBox"><feTurbulence type="fractalNoise" baseFrequency=${(2.2 * 1200 / fr.w / 4).toFixed(3)} numOctaves="2" seed="3"/><feColorMatrix type="saturate" values="0"/></filter>
+      </defs>
+      <g filter=${shakeSd > 0.05 ? 'url(#shake)' : null}>
+        <g filter=${blurSd > 0.05 ? 'url(#bgblur)' : null}><${SceneBack}/></g>
+        <${SceneFront}/>
+      </g>
+      ${grain > 0 ? html`<rect x=${fr.x} y=${fr.y} width=${fr.w} height=${fr.h} filter="url(#grain)" opacity=${grain.toFixed(2)} style="mix-blend-mode:overlay"/>` : ''}
+    </svg></div>
+    <div class="cap">${[blur ? `Focused on the bird at ${fmtDist(S.dist)}.` : '', shake ? (ratio > 1 ? `Shutter is ${ratio.toFixed(1)}× slower than safe, so the shot shakes.` : 'Shutter is fast enough: no shake.') : '', expose ? (Math.abs(S.err) <= 0.34 ? 'Exposure looks right.' : S.err < 0 ? 'Too dark.' : 'Too bright.') : ''].join(' ')}</div></div>`;
+}
+
+function FovDiagram({S}){
+  const {f, f0, f1, hfov} = S;
+  const W = 420, H = 190, cy = 85;
+  const bl = 22 + (f1 > f0 ? logPos(f, f0, f1) * 50 : 20);
+  const bx = 70 + bl, len = W - 10 - bx;
+  const h = Math.tan(hfov/2*Math.PI/180) * len;
+  return html`<div><h3>Field of view from above</h3><svg class="diag" viewBox=${`0 0 ${W} ${H}`} role="img" aria-label=${`Field of view ${Math.round(hfov)} degrees`}>
+    <defs><clipPath id="fovclip"><rect x="0" y="4" width=${W} height=${H - 36}/></clipPath></defs>
+    <g clip-path="url(#fovclip)"><polygon points=${`${bx},${cy} ${W-10},${cy-h} ${W-10},${cy+h}`} fill="#e8a33a" fill-opacity="0.22" stroke="#c07a1c" stroke-width="1"/></g>
+    <line x1=${bx} y1=${cy} x2=${W-10} y2=${cy} stroke="currentColor" stroke-opacity="0.3" stroke-dasharray="4 4"/>
+    <rect x="20" y=${cy-22} width="50" height="44" rx="6" fill="currentColor" fill-opacity="0.15" stroke="currentColor" stroke-opacity="0.4"/>
+    <rect x="70" y=${cy-15} width=${bl} height="30" rx="3" fill="#7f77dd" fill-opacity="0.35" stroke="#534ab7"/>
+    <text x="20" y=${H-10} font-size="13" fill="currentColor">${hfov < 10 ? hfov.toFixed(1) : Math.round(hfov)}° across · lens gets longer as you zoom</text>
+  </svg></div>`;
+}
+
+function DofDiagram({S}){
+  const {D, dist, fd} = S;
+  const W = 420, H = 170, x0 = 40, x1 = 380, xinf = 405, lo = 0.3, hi = 200;
+  const X = m => !isFinite(m) || m >= hi ? xinf : x0 + Math.max(0, logPos(Math.max(m, lo), lo, hi)) * (x1 - x0);
+  const nx = X(D.near), fx = X(D.far), sx = X(dist);
+  return html`<div><h3>What's in focus</h3><svg class="diag" viewBox=${`0 0 ${W} ${H}`} role="img" aria-label=${`Sharp from ${fd(D.near)} to ${fd(D.far)}`}>
+    <rect x=${x0} y="50" width=${xinf - x0} height="36" rx="4" fill="currentColor" fill-opacity="0.06"/>
+    <rect x=${nx} y="50" width=${Math.max(2, fx - nx)} height="36" rx="4" fill="#1d9e75" fill-opacity="0.35" stroke="#0f6e56"/>
+    <rect x="10" y="56" width="22" height="24" rx="4" fill="currentColor" fill-opacity="0.3"/>
+    <polygon points=${`${sx},46 ${sx-6},36 ${sx+6},36`} fill="#e8a33a"/>
+    <text x=${clamp(sx, 70, W-60)} y="28" font-size="12" text-anchor="middle" fill="currentColor">focus ${fmtDist(dist)}</text>
+    ${[0.5,1,2,5,10,20,50,100].map(t => html`<g><line x1=${X(t)} y1="86" x2=${X(t)} y2="92" stroke="currentColor" stroke-opacity="0.4"/><text x=${X(t)} y="106" font-size="11" text-anchor="middle" fill="currentColor" fill-opacity="0.6">${t}m</text></g>`)}
+    <text x=${xinf} y="106" font-size="11" text-anchor="middle" fill="currentColor" fill-opacity="0.6">∞</text>
+    <text x="10" y=${H-28} font-size="13" fill="currentColor">Sharp from ${fd(D.near)} to ${fd(D.far)}</text>
+    <text x="10" y=${H-10} font-size="12" fill="currentColor" fill-opacity="0.7">Green band = acceptably sharp (log scale)</text>
+  </svg></div>`;
+}
+
+function IrisDiagram({S}){
+  const r = clamp(64 * 1.4 / S.N, 3, 64), cx = 80, cy = 80;
+  const pts = Array.from({length: 7}, (_, i) => { const a = i/7 * 2*Math.PI - Math.PI/2; return `${(cx + r*Math.cos(a)).toFixed(1)},${(cy + r*Math.sin(a)).toFixed(1)}`; }).join(' ');
+  const rel = Math.pow(S.maxN / S.N, 2);
+  return html`<div><h3>The opening</h3><svg class="diag" viewBox="0 0 420 170" role="img" aria-label=${`Aperture f/${fN(S.N)}`}>
+    <circle cx=${cx} cy=${cy} r="72" fill="currentColor" fill-opacity="0.75"/>
+    <polygon points=${pts} fill="#f6d776"/>
+    <text x="175" y="40" font-size="13" fill="currentColor">f/${fN(S.N)}: opening ≈ ${(S.f / S.N).toFixed(1)}mm wide</text>
+    <text x="175" y="66" font-size="13" fill="currentColor">Light vs wide open (f/${fN(S.maxN)})</text>
+    <rect x="175" y="76" width="220" height="16" rx="4" fill="currentColor" fill-opacity="0.1"/>
+    <rect x="175" y="76" width=${Math.max(2, 220 * rel)} height="16" rx="4" fill="#e8a33a"/>
+    <text x="175" y="112" font-size="13" fill="currentColor">${Math.round(rel*100)}% of the light · ${stopsBetween(S.maxN, S.N).toFixed(1)} stops darker</text>
+  </svg></div>`;
+}
+
+function ApertureChart({S}){
+  const {lens, f, f0, f1} = S;
+  const W = 420, H = 190, x0 = 46, x1 = 400, y0 = 24, y1 = 140;
+  const a0 = lens.a[0], a1 = Math.max(lens.a[1], a0 * 1.12);
+  const X = v => f1 > f0 ? x0 + logPos(v, f0, f1) * (x1 - x0) : (x0 + x1)/2;
+  const Y = n => y0 + logPos(n, a0, a1) * (y1 - y0);
+  const pts = focalSamples(lens).map(v => `${X(v).toFixed(1)},${Y(maxApAt(lens, v).N).toFixed(1)}`).join(' ');
+  const cur = maxApAt(lens, f).N;
+  return html`<div><h3>Widest aperture across the zoom</h3><svg class="diag" viewBox=${`0 0 ${W} ${H}`} role="img" aria-label="Max aperture by focal length">
+    <line x1=${x0} y1=${y1} x2=${x1} y2=${y1} stroke="currentColor" stroke-opacity="0.3"/>
+    <polyline points=${pts} fill="none" stroke="#534ab7" stroke-width="2"/>
+    <circle cx=${X(f)} cy=${Y(cur)} r="6" fill="#e8a33a"/>
+    <text x=${x0 - 6} y=${Y(a0) + 4} font-size="11" text-anchor="end" fill="currentColor" fill-opacity="0.7">f/${fN(a0)}</text>
+    ${lens.a[1] > a0 ? html`<text x=${x0 - 6} y=${Y(lens.a[1]) + 4} font-size="11" text-anchor="end" fill="currentColor" fill-opacity="0.7">f/${fN(lens.a[1])}</text>` : ''}
+    <text x=${x0} y=${y1 + 18} font-size="11" fill="currentColor" fill-opacity="0.7">${f0}mm</text>
+    <text x=${x1} y=${y1 + 18} font-size="11" text-anchor="end" fill="currentColor" fill-opacity="0.7">${f1}mm</text>
+    <text x=${x0} y=${H - 8} font-size="13" fill="currentColor">At ${f}mm the widest is f/${fN(cur)}${S.est ? ' (estimated)' : ''}. Lower on the chart = less light.</text>
+  </svg></div>`;
+}
+
+function Meter({S}){
+  const e = clamp(S.err, -3, 3), W = 420, x = 30 + (e + 3) / 6 * 360;
+  return html`<div><h3>Light meter</h3><svg class="diag" viewBox=${`0 0 ${W} 110`} role="img" aria-label=${`Exposure ${S.err.toFixed(1)} stops`}>
+    <rect x="30" y="30" width="360" height="14" rx="4" fill="currentColor" fill-opacity="0.1"/>
+    <rect x="200" y="30" width="20" height="14" fill="#1d9e75" fill-opacity="0.5"/>
+    ${[-3,-2,-1,0,1,2,3].map(v => html`<g><line x1=${30 + (v+3)*60} y1="44" x2=${30 + (v+3)*60} y2="52" stroke="currentColor" stroke-opacity="0.5"/><text x=${30 + (v+3)*60} y="66" font-size="11" text-anchor="middle" fill="currentColor" fill-opacity="0.7">${v > 0 ? '+' + v : v}</text></g>`)}
+    <polygon points=${`${x},28 ${x-7},16 ${x+7},16`} fill="#e8a33a"/>
+    <text x="30" y="94" font-size="13" fill="currentColor">${Math.abs(S.err) <= 0.34 ? 'Correct exposure' : `${Math.abs(S.err).toFixed(1)} stops too ${S.err < 0 ? 'dark' : 'bright'}`}</text>
+  </svg></div>`;
+}
+
+/* ---------- Modules ---------- */
+const MODULES = [
+  {
+    id: 'focal-length', title: 'Focal length',
+    intro: 'Focal length (in mm) sets how much of the scene fits in the picture. Short focal lengths are wide; long ones magnify. Zoom with the slider and watch the orange box shrink.',
+    idea: 'Double the focal length and you see half as wide, with everything twice as big.',
+    controls: ['zoom'],
+    visuals: S => html`<div class="two"><${SceneView} S=${S}/><${PreviewView} S=${S} blur=${false}/></div><div style="margin-top:12px"><${FovDiagram} S=${S}/></div>`,
+    tasks: S => {
+      const zoom = S.f1 > S.f0, half = Math.round(S.f0 * 2);
+      return [
+        {id: 'in', text: `Zoom all the way in to ${S.f1}mm.`, ok: S.f === S.f1, na: !zoom},
+        {id: 'out', text: `Zoom back out to ${S.f0}mm and notice how much more fits in.`, ok: S.f === S.f0, na: !zoom},
+        {id: 'half', text: `Find the focal length that shows half as wide as ${S.f0}mm (around ${half}mm).`, ok: Math.abs(S.f - half) <= Math.max(2, half * 0.06), na: !zoom || half > S.f1},
+      ];
+    },
+    quiz: {q: 'You zoom from 50mm to 100mm. What happens to the view?', opts: ['It gets twice as wide', 'It shows about half as wide, and things look twice as big', 'Nothing changes, only the brightness'], ans: 1,
+           why: 'Angle of view shrinks roughly in proportion to focal length, so twice the focal length gives about half the width.'},
+  },
+  {
+    id: 'crop-factor', title: 'Sensor and crop factor',
+    intro: 'The same lens frames differently on different cameras. A smaller sensor only records the middle of the image, so it looks more zoomed in. Multiply by the crop factor to compare with full frame.',
+    idea: 'Equivalent focal length = focal length × crop factor (1.5× Nikon/Sony/Fuji APS-C, 1.6× Canon APS-C, 2× Micro Four Thirds).',
+    controls: ['sensor', 'zoom'],
+    visuals: S => html`<div class="two"><${SceneView} S=${S}/><div><div class="metrics">
+        <div class="metric"><div class="k">Real focal length</div><div class="val">${S.f}mm</div></div>
+        <div class="metric"><div class="k">Crop factor</div><div class="val">${S.crop.toFixed(2)}×</div></div>
+        <div class="metric"><div class="k">Full-frame equivalent</div><div class="val">${Math.round(S.eq)}mm</div><div class="s">${useLabel(S.eq)[0]}</div></div>
+      </div><p class="hint">${S.sensor.name}: ${S.sensor.w}×${S.sensor.h}mm sensor.</p></div></div>`,
+    tasks: S => {
+      const reach = Math.round(S.f1 * 1.5);
+      const normalOk = SENSORS.some(s => S.f0 * s.crop <= 56 && S.f1 * s.crop >= 44);
+      return [
+        {id: 'mft', text: 'Pick Micro Four Thirds and see the equivalent focal length double.', ok: S.sensorId === 'mft'},
+        {id: 'reach', text: `Get at least ${reach}mm equivalent reach (pick a sensor and zoom).`, ok: S.eq >= reach - 0.5},
+        {id: 'normal', text: 'Set up a "normal" view, 45–55mm equivalent, on any sensor.', ok: S.eq >= 45 && S.eq <= 55, na: !normalOk},
+      ];
+    },
+    quiz: {q: 'A 50mm lens on a 1.5× crop camera frames like…', opts: ['33mm', '50mm', '75mm'], ans: 2, why: '50 × 1.5 = 75mm equivalent. The lens is the same; the smaller sensor crops the view.'},
+  },
+  {
+    id: 'aperture', title: 'Aperture and stops',
+    intro: 'The aperture is the hole that lets light through the lens. The f-number is focal length ÷ hole width, so a bigger number means a smaller hole. One "stop" halves or doubles the light.',
+    idea: 'Full stops: f/1.4 → 2 → 2.8 → 4 → 5.6 → 8 → 11 → 16 → 22. Each step lets in half the light of the one before.',
+    controls: ['aperture'],
+    visuals: S => html`<${IrisDiagram} S=${S}/>`,
+    tasks: S => {
+      const st = stopsBetween(S.maxN, S.N);
+      return [
+        {id: 'one', text: `Close down exactly 1 stop from wide open (f/${fN(S.maxN)}), so half the light gets in.`, ok: Math.abs(st - 1) < 0.17},
+        {id: 'two', text: 'Now close down 2 stops: only a quarter of the light.', ok: Math.abs(st - 2) < 0.17},
+        {id: 'f11', text: 'Set f/11, a common choice for landscapes.', ok: S.N === 11, na: S.maxN > 11},
+      ];
+    },
+    quiz: {q: 'Going from f/4 to f/5.6 lets in…', opts: ['Twice the light', 'Half the light', 'The same light'], ans: 1, why: 'f/4 to f/5.6 is one full stop smaller, which halves the light.'},
+  },
+  {
+    id: 'variable-aperture', title: 'Variable aperture',
+    intro: 'Zooms like f/3.5-6.3 can open to f/3.5 only at the wide end. As you zoom in, the widest available aperture gets smaller. Lenses with one number, like f/2.8 or f/4, keep it through the whole range.',
+    idea: 'The first f-number is the widest aperture at the short end; the second is the widest at the long end.',
+    controls: ['zoom'],
+    visuals: S => html`<${ApertureChart} S=${S}/>${S.lens.a[1] === S.lens.a[0] ? html`<div class="note good">Your current lens has a constant aperture. Pick a superzoom from the lens menu to practise this module.</div>` : ''}`,
+    tasks: S => {
+      const varAp = S.lens.a[1] > S.lens.a[0];
+      const fs = []; for (let v = S.f0; v <= S.f1; v++) fs.push(v);
+      const lastWide = varAp ? Math.max(...fs.filter(v => maxApAt(S.lens, v).N === S.lens.a[0])) : S.f0;
+      return [
+        {id: 'end', text: `Zoom to ${S.f1}mm and read the widest aperture there.`, ok: S.f === S.f1, na: !varAp},
+        {id: 'last', text: `Find the longest focal length that still opens to f/${fN(S.lens.a[0])}.`, ok: S.f === lastWide, na: !varAp || lastWide === S.f0},
+      ];
+    },
+    quiz: {q: 'On an 18-200mm f/3.5-6.3 lens at 200mm, the widest aperture is…', opts: ['f/3.5', 'f/6.3', 'f/1.8'], ans: 1, why: 'The second number is the widest aperture at the long end.'},
+  },
+  {
+    id: 'depth-of-field', title: 'Depth of field',
+    intro: 'Depth of field is how much of the scene, front to back, looks sharp. Three things make it thinner: a wider aperture (smaller f-number), a longer focal length, and focusing closer.',
+    idea: 'For portraits, shallow depth isolates the subject. For landscapes, stop down and focus about a third into the scene to get everything sharp.',
+    controls: ['zoom', 'aperture', 'focus'],
+    visuals: S => html`<div class="two"><${PreviewView} S=${S}/><${DofDiagram} S=${S}/></div>`,
+    tasks: S => {
+      const thin = niceUp(minDepth(S.lens, S.sensor) * 1.5);
+      const near = Math.max(3, Math.ceil(minHyperNear(S.lens, S.sensor) * 1.15));
+      return [
+        {id: 'thin', text: `Make the sharp zone thinner than ${fmtDist(thin)}.`, ok: S.depth < thin},
+        {id: 'deep', text: `Get everything from ${near}m to the horizon (∞) sharp.`, ok: S.D.near <= near && !isFinite(S.D.far)},
+      ];
+    },
+    quiz: {q: 'Which gives the shallowest depth of field?', opts: ['24mm at f/8, subject 10m away', '85mm at f/1.8, subject 2m away', '18mm at f/11, subject 5m away'], ans: 1, why: 'Long focal length, wide aperture and close focus all shrink the sharp zone.'},
+  },
+  {
+    id: 'background-blur', title: 'Background blur',
+    intro: 'A distant background blurs more when the lens is longer, the aperture wider, and the subject closer. With slow superzooms, zooming in and getting close is usually the best way to blur the background.',
+    idea: 'Blur grows with focal length squared, so zooming in helps more than the slightly smaller aperture hurts.',
+    controls: ['zoom', 'aperture', 'focus'],
+    visuals: S => html`<div class="two"><${PreviewView} S=${S}/><div><div class="metrics">
+        <div class="metric"><div class="k">Background blur</div><div class="val">${pct(S.blurPct)}</div><div class="s">of frame width</div></div>
+        <div class="metric"><div class="k">Look</div><div class="val">${S.blurPct < 0.3 ? 'Sharp' : S.blurPct < 1.5 ? 'Soft' : S.blurPct < 4 ? 'Blurred' : 'Creamy'}</div></div>
+      </div><p class="hint">Blur disc = f² ÷ (N × (distance − f)), compared with the sensor width.</p></div></div>`,
+    tasks: S => {
+      const target = Math.min(4, Math.floor(maxBlurPct(S.lens, S.sensor) * 0.7 * 10) / 10);
+      return [
+        {id: 'blur', text: `Blur the background to at least ${target}% of the frame.`, ok: S.blurPct >= target},
+        {id: 'sharp', text: 'Now make the background almost sharp (under 0.3%).', ok: S.blurPct < 0.3},
+      ];
+    },
+    quiz: {q: 'Your 18-200mm shot has a busy background. What blurs it most?', opts: ['Zoom in to 200mm and move closer to the subject', 'Stop down to f/16', 'Zoom out to 18mm and step back'], ans: 0, why: 'Longer focal length and closer distance increase blur far more than the change from f/3.5 to f/6.3 reduces it.'},
+  },
+  {
+    id: 'shutter-speed', title: 'Shutter speed and shake',
+    intro: 'Shutter speed is how long the sensor collects light. Handheld, slow speeds blur from your hands shaking, and long lenses magnify that shake. Rule of thumb: use at least 1 ÷ equivalent focal length. Stabilization (IS) lets you go slower for still subjects.',
+    idea: 'Safe handheld speed ≈ 1/(focal length × crop). Each stop of IS lets you halve it. Moving subjects still need fast speeds.',
+    controls: ['zoom', 'is', 'shutter'],
+    visuals: S => html`<div class="two"><${PreviewView} S=${S} blur=${false} shake=${true}/><div><div class="metrics">
+        <div class="metric"><div class="k">Safe without IS</div><div class="val">${fmtShutter(S.safeBase)}</div></div>
+        <div class="metric"><div class="k">Safe with ${S.isStops}-stop IS</div><div class="val">${fmtShutter(S.safeT)}</div></div>
+        <div class="metric"><div class="k">Your shutter</div><div class="val">${fmtShutter(S.shut)}</div><div class="s">${S.shut <= S.safeT * 1.06 ? 'steady' : 'shaky'}</div></div>
+      </div></div></div>`,
+    tasks: S => {
+      const safe = slowestSafe(S.safeBase);
+      return [
+        {id: 'long', text: `IS off, zoomed to ${S.f1}mm: choose the slowest shutter speed that's still safe (${fmtShutter(safe)}).`, ok: S.isStops === 0 && S.f === S.f1 && S.shut === slowestSafe(1/(S.f1*S.crop))},
+        {id: 'is', text: 'Turn on 3 stops of IS and pick a shutter at least 2 stops slower that is still steady.', ok: S.isStops >= 3 && S.shut >= S.safeBase * 3.9 && S.shut <= S.safeT * 1.06},
+        {id: 'freeze', text: 'A dog runs past. Pick a speed that freezes motion: 1/500 or faster.', ok: S.shut <= 1/500 + 1e-9},
+      ];
+    },
+    quiz: {q: 'Handheld at 200mm on a 1.5× crop camera with no IS, a safe shutter speed is about…', opts: ['1/30', '1/320', '1/8000'], ans: 1, why: '200 × 1.5 = 300mm equivalent, so about 1/300. The nearest standard speed is 1/320.'},
+  },
+  {
+    id: 'exposure', title: 'Exposure triangle',
+    intro: 'Aperture, shutter speed and ISO together set brightness. Any one can make up for another: open up a stop, and you can use a shutter one stop faster or an ISO one stop lower. ISO brightens electronically but adds grain.',
+    idea: 'Get the meter to 0. Choose aperture for depth of field, shutter for sharpness, then raise ISO only as much as you need.',
+    controls: ['light', 'aperture', 'shutter', 'iso', 'zoom'],
+    visuals: S => html`<div class="two"><${PreviewView} S=${S} shake=${true} expose=${true}/><div><${Meter} S=${S}/>
+      <div class="hint">Camera's auto suggestion at f/${fN(S.N)}: ${fmtShutter(S.autoT)}, ISO ${S.autoIso}.</div></div></div>`,
+    tasks: S => {
+      const minIso = Math.min(...focalSamples(S.lens).map(v => { const n = maxApAt(S.lens, v).N; return 100 * n * n / (Math.pow(2, 6) * (Math.pow(2, S.isStops) / (v * S.crop))); }));
+      const isoCap = Math.max(3200, ISOS.find(i => i >= minIso) || 51200);
+      const ok = Math.abs(S.err) <= 0.34;
+      return [
+        {id: 'sun', text: 'Choose "Bright sun" and get a correct exposure (meter at 0).', ok: S.lightId === 'sun' && ok},
+        {id: 'evening', text: 'Switch to "Home in the evening". Get a correct exposure while staying handheld-steady.', ok: S.lightId === 'home' && ok && S.shut <= S.safeT * 1.06},
+        {id: 'clean', text: `Same scene, but keep ISO at ${isoCap} or lower. Hint: zoom out and open the aperture.`, ok: S.lightId === 'home' && ok && S.shut <= S.safeT * 1.06 && S.iso <= isoCap},
+      ];
+    },
+    quiz: {q: 'Your photo is one stop too dark. Which change fixes it?', opts: ['ISO 200 → 400', 'f/4 → f/5.6', '1/250 → 1/500'], ans: 0, why: 'Doubling ISO adds one stop of brightness. The other two each take away a stop.'},
+  },
+];
+
+/* ---------- Controls ---------- */
+function Controls({S, show, set}){
+  const has = k => show.includes(k);
+  const presets = [...new Set([S.f0, ...[24,35,50,85,135,200,300,400,600].filter(p => p > S.f0 && p < S.f1), S.f1])];
+  const apIdx = Math.max(0, S.apOptions.indexOf(S.N));
+  const shIdx = SHUT_S.indexOf(S.shut), isoIdx = ISOS.indexOf(S.iso);
+  return html`<div class="controls">
+    ${has('sensor') ? html`<div class="ctl"><span class="n">Sensor</span><select value=${S.sensorId} onChange=${e => set.sensorId(e.target.value)} aria-label="Sensor">${SENSORS.map(s => html`<option value=${s.id}>${s.name}</option>`)}</select><span class="v">${S.crop.toFixed(2)}×</span></div>` : ''}
+    ${has('light') ? html`<div class="ctl"><span class="n">Light</span><select value=${S.lightId} onChange=${e => set.lightId(e.target.value)} aria-label="Light">${LIGHT.map(l => html`<option value=${l.id}>${l.name}</option>`)}</select><span class="v">EV ${S.light.ev}</span></div>` : ''}
+    ${has('zoom') && S.f1 > S.f0 ? html`
+      <div class="ctl"><span class="n">Zoom</span>
+        <input type="range" min="0" max="1000" step="1" value=${Math.round(logPos(S.f, S.f0, S.f1)*1000)} aria-label="Focal length" onInput=${e => set.focal(Math.round(logVal(+e.target.value/1000, S.f0, S.f1)))}/>
+        <span class="v">${S.f}mm</span></div>
+      <div class="presets">${presets.map(p => html`<button class=${p === S.f ? 'on' : ''} onClick=${() => set.focal(p)}>${p}mm</button>`)}</div>` : ''}
+    ${has('zoom') && S.f1 === S.f0 ? html`<div class="hint">Prime lens: fixed at ${S.f}mm.</div>` : ''}
+    ${has('aperture') ? html`<div class="ctl"><span class="n">Aperture</span>
+        <input type="range" min="0" max=${S.apOptions.length - 1} step="1" value=${apIdx} aria-label="Aperture" onInput=${e => set.userN(+e.target.value === 0 ? null : S.apOptions[+e.target.value])}/>
+        <span class="v">f/${fN(S.N)}</span></div>` : ''}
+    ${has('focus') ? html`<div class="ctl"><span class="n">Focus at</span>
+        <input type="range" min="0" max="1000" step="1" value=${Math.round(logPos(S.dist, 0.5, 100)*1000)} aria-label="Subject distance" onInput=${e => set.dist(Math.round(logVal(+e.target.value/1000, 0.5, 100)*10)/10)}/>
+        <span class="v">${fmtDist(S.dist)}</span></div>` : ''}
+    ${has('is') ? html`<div class="ctl"><span class="n">Stabilization</span><select value=${S.isStops} onChange=${e => set.isStops(+e.target.value)} aria-label="Stabilization">${[0,1,2,3,4,5].map(n => html`<option value=${n}>${n === 0 ? 'Off' : n + ' stops'}</option>`)}</select><span class="v"></span></div>` : ''}
+    ${has('shutter') ? html`<div class="ctl"><span class="n">Shutter</span>
+        <input type="range" min="0" max=${SHUT_S.length - 1} step="1" value=${shIdx} aria-label="Shutter speed" onInput=${e => set.shut(SHUT_S[+e.target.value])}/>
+        <span class="v">${fmtShutter(S.shut)}</span></div>` : ''}
+    ${has('iso') ? html`<div class="ctl"><span class="n">ISO</span>
+        <input type="range" min="0" max=${ISOS.length - 1} step="1" value=${isoIdx} aria-label="ISO" onInput=${e => set.iso(ISOS[+e.target.value])}/>
+        <span class="v">${S.iso}</span></div>` : ''}
+  </div>`;
+}
+
+/* ---------- Module page ---------- */
+function Quiz({quiz, answer, onAnswer}){
+  return html`<div class="quiz"><h3>Check yourself</h3><p style="margin:4px 0 8px">${quiz.q}</p>
+    <div class="opts">${quiz.opts.map((o, i) => html`<button class=${answer === i ? (i === quiz.ans ? 'right' : 'wrong') : ''} onClick=${() => onAnswer(i)}>${o}</button>`)}</div>
+    ${answer != null ? html`<div class=${'note ' + (answer === quiz.ans ? 'good' : 'warn')}>${answer === quiz.ans ? 'Correct. ' : 'Not quite, try another. '}${answer === quiz.ans ? quiz.why : ''}</div>` : ''}
+  </div>`;
+}
+
+function ModulePage({m, idx, S, set, done, answers, onAnswer, go}){
+  const tasks = m.tasks(S);
+  let blocked = false;
+  return html`<div>
+    <div class="card">
+      <div class="hint">Module ${idx + 1} of ${MODULES.length + 1}</div>
+      <h2 style="font-size:21px;margin:2px 0 8px">${m.title}</h2>
+      <p style="margin:0 0 8px">${m.intro}</p>
+      <div class="idea"><b>Key idea:</b> ${m.idea}</div>
+    </div>
+    <div class="card"><${Controls} S=${S} show=${m.controls} set=${set}/></div>
+    <div class="card">${m.visuals(S)}</div>
+    <div class="card">
+      <h3>Practice</h3>
+      <ol class="tasks">${tasks.map(t => {
+        const key = m.id + '.' + t.id, isDone = done[key] || t.na;
+        const locked = blocked && !isDone;
+        if (!isDone) blocked = true;
+        return html`<li class=${isDone ? 'done' : locked ? 'locked' : 'active'}>
+          <span class="tick">${isDone ? '✓' : ''}</span>
+          <span>${t.text}${t.na ? html` <span class="badge">doesn't apply to this lens</span>` : ''}${locked ? html` <span class="badge">finish the step above first</span>` : ''}</span></li>`;
+      })}</ol>
+      <${Quiz} quiz=${m.quiz} answer=${answers[m.id]} onAnswer=${i => onAnswer(m.id, i)}/>
+    </div>
+    <div class="navbtns">
+      <button onClick=${() => go(idx - 1)} disabled=${idx === 0}>← Back</button>
+      <button class="primary" onClick=${() => go(idx + 1)}>${idx === MODULES.length - 1 ? 'Go to the playground →' : 'Next module →'}</button>
+    </div>
+  </div>`;
+}
+
+/* ---------- Playground (all controls) ---------- */
+function Playground({S, set, go}){
+  const [useName, useText] = useLabel(S.eq);
+  return html`<div>
+    <div class="card"><div class="hint">Module ${MODULES.length + 1} of ${MODULES.length + 1}</div>
+      <h2 style="font-size:21px;margin:2px 0 8px">Playground</h2>
+      <p style="margin:0">Everything together. Try a real situation: a portrait at dusk, a bird in a tree, a landscape at noon.</p></div>
+    <div class="card"><${Controls} S=${S} show=${['sensor','light','zoom','aperture','focus','is','shutter','iso']} set=${set}/>
+      <div class="presets" style="margin-left:0"><button onClick=${() => { set.shut(slowestSafe(S.autoT)); set.iso(S.autoIso); }}>Auto exposure</button></div></div>
+    <div class="card"><div class="metrics">
+      <div class="metric"><div class="k">Full-frame equivalent</div><div class="val">${Math.round(S.eq)}mm</div><div class="s">${useName}</div></div>
+      <div class="metric"><div class="k">Angle of view</div><div class="val">${S.hfov < 10 ? S.hfov.toFixed(1) : Math.round(S.hfov)}°</div></div>
+      <div class="metric"><div class="k">Widest aperture here</div><div class="val">f/${fN(S.maxN)}</div><div class="s">${S.est ? 'estimated' : 'from spec'}</div></div>
+      <div class="metric"><div class="k">Sharp zone</div><div class="val">${isFinite(S.depth) ? S.fd(S.depth) : '∞'}</div><div class="s">${S.fd(S.D.near)} to ${S.fd(S.D.far)}</div></div>
+      <div class="metric"><div class="k">Background blur</div><div class="val">${pct(S.blurPct)}</div></div>
+      <div class="metric"><div class="k">Exposure</div><div class="val">${Math.abs(S.err) <= 0.34 ? 'OK' : (S.err > 0 ? '+' : '') + S.err.toFixed(1)}</div><div class="s">stops</div></div>
+    </div><p class="hint" style="margin-bottom:0">${useText}</p></div>
+    <div class="card"><div class="two"><${SceneView} S=${S}/><${PreviewView} S=${S} shake=${true} expose=${true}/></div></div>
+    <div class="card"><div class="two"><${DofDiagram} S=${S}/><${Meter} S=${S}/></div></div>
+    <div class="navbtns"><button onClick=${() => go(MODULES.length - 1)}>← Back</button><span></span></div>
+  </div>`;
+}
+
+/* ---------- App shell ---------- */
+const STORE = 'lenslab-v2';
+function loadSaved(){ try { return JSON.parse(localStorage.getItem(STORE)) || {}; } catch (e) { return {}; } }
+function hashIndex(){ try { const h = location.hash.slice(1); const i = MODULES.findIndex(m => m.id === h); return h === 'playground' ? MODULES.length : i; } catch (e) { return -1; } }
+
+function App(){
+  const saved = useMemo(loadSaved, []);
+  const startText = saved.text && parseLens(saved.text) ? saved.text : '18-200mm f/4-6.3';
+  const startLib = saved.lensId && LENSES.find(l => l.id === saved.lensId);
+  const [text, setText] = useState(startLib ? specText(startLib) : startText);
+  const [lens, setLens] = useState(() => startLib || {id: 'custom', n: 'Your lens', ...parseLens(startText), fmt: null, is: true});
+  const [sensorId, setSensorId] = useState(saved.sensorId || 'apsc');
+  const [focal, setFocal] = useState(lens.f[0]);
+  const [userN, setUserN] = useState(null);
+  const [dist, setDist] = useState(4);
+  const [isStops, setIsStops] = useState(3);
+  const [lightId, setLightId] = useState('overcast');
+  const [shut, setShut] = useState(1/250);
+  const [iso, setIso] = useState(100);
+  const [done, setDone] = useState(saved.done || {});
+  const [answers, setAnswers] = useState(saved.answers || {});
+  const [page, setPage] = useState(() => { const h = hashIndex(); return h >= 0 ? h : 0; });
+
+  const st = {lens, sensorId, focal, userN, dist, isStops, lightId, shut, iso};
+  const S = compute(st);
+  const set = {focal: setFocal, userN: setUserN, dist: setDist, isStops: setIsStops, lightId: setLightId, shut: setShut, iso: setIso, sensorId: setSensorId};
+
+  // record tasks the moment they are met, in order
+  const m = MODULES[page];
+  if (m){
+    let blocked = false, add = null;
+    for (const t of m.tasks(S)){
+      const key = m.id + '.' + t.id;
+      if (done[key] || t.na) continue;
+      if (blocked) break;
+      if (t.ok){ add = add || {}; add[key] = true; } else blocked = true;
+    }
+    if (add) setTimeout(() => setDone(d => ({...d, ...add})), 0);
+  }
+
+  useEffect(() => { try { localStorage.setItem(STORE, JSON.stringify({text, lensId: lens.id === 'custom' ? null : lens.id, sensorId, done, answers})); } catch (e) {} }, [text, lens, sensorId, done, answers]);
+  useEffect(() => {
+    const onHash = () => { const h = hashIndex(); if (h >= 0) setPage(h); };
+    try { window.addEventListener('hashchange', onHash); } catch (e) {}
+    return () => { try { window.removeEventListener('hashchange', onHash); } catch (e) {} };
+  }, []);
+
+  function go(i){
+    i = clamp(i, 0, MODULES.length);
+    setPage(i);
+    try { location.hash = i === MODULES.length ? 'playground' : MODULES[i].id; } catch (e) {}
+    try { window.scrollTo(0, 0); } catch (e) {}
+  }
+  function pickLens(l){
+    setLens(l); setFocal(l.f[0]); setUserN(null);
+    setSensorId(sensorFor(l, sensorId)); setIsStops(l.is ? 3 : 0); setText(specText(l));
+  }
+  function onText(v){
+    setText(v);
+    const p = parseLens(v);
+    if (p){ setLens({id: 'custom', n: 'Your lens', ...p, fmt: null, is: isStops > 0}); setFocal(x => clamp(x, p.f[0], p.f[1])); setUserN(null); }
+  }
+  const parsed = parseLens(text);
+  const modDone = mod => {
+    const tasks = mod.tasks(compute({...st}));
+    return tasks.every(t => t.na || done[mod.id + '.' + t.id]) && answers[mod.id] === mod.quiz.ans;
+  };
+  const completed = MODULES.filter(modDone).length;
+  const fmtMismatch = lens.fmt && lens.fmt !== S.sensor.fmt;
+
+  return html`<div class="wrap">
+    <h1>Photography 101</h1>
+    <p class="sub">Learn what your lens does, one idea at a time. Each module has practice tasks that tick off as you get them right.</p>
+    <div class="lensbar card">
+      <div><label class="lbl" for="lensin">Your lens</label>
+        <input id="lensin" type="text" value=${text} placeholder="18-200mm f/3.5-6.3" onInput=${e => onText(e.target.value)}/>
+        ${parsed ? '' : html`<div class="err">Type a range and f-stop, like 18-200mm f/4-6.3 or 50mm f/1.8.</div>`}</div>
+      <div><label class="lbl" for="libsel">Or pick a lens</label>
+        <select id="libsel" value=${lens.id} onChange=${e => { const l = LENSES.find(x => x.id === e.target.value); if (l) pickLens(l); }}>
+          <option value="custom">Your typed lens</option>
+          ${CATS.filter(c => c[0] !== 'all').map(([id, nm]) => html`<optgroup label=${nm}>${LENSES.filter(l => l.cat === id).map(l => html`<option value=${l.id}>${l.n} (${l.fmt})</option>`)}</optgroup>`)}
+        </select></div>
+      <div><label class="lbl" for="sensor">Camera sensor</label>
+        <select id="sensor" value=${sensorId} onChange=${e => setSensorId(e.target.value)}>${SENSORS.map(s => html`<option value=${s.id}>${s.name}</option>`)}</select></div>
+      ${fmtMismatch ? html`<div class="note warn" style="grid-column:1/-1;margin-top:0">${lens.fmt === 'APS-C' && S.sensor.fmt === 'FF' ? 'This lens is made for APS-C. On full frame the corners go dark, so most cameras switch to crop mode.' : `This lens is made for ${lens.fmt} cameras; numbers show what it would do on the sensor you picked.`}</div>` : ''}
+    </div>
+    <div class="layout2">
+      <nav class="card modnav" aria-label="Modules">
+        <div class="hint" style="margin-bottom:6px">${completed} of ${MODULES.length} modules complete</div>
+        <div class="progress"><span style=${`width:${completed / MODULES.length * 100}%`}></span></div>
+        ${MODULES.map((mod, i) => html`<button class=${'modbtn' + (page === i ? ' on' : '')} onClick=${() => go(i)}>
+          <span class=${'num' + (modDone(mod) ? ' ok' : '')}>${modDone(mod) ? '✓' : i + 1}</span>${mod.title}</button>`)}
+        <button class=${'modbtn' + (page === MODULES.length ? ' on' : '')} onClick=${() => go(MODULES.length)}><span class="num">★</span>Playground</button>
+        <button class="reset" onClick=${() => { setDone({}); setAnswers({}); }}>Reset progress</button>
+      </nav>
+      <main>
+        ${page < MODULES.length
+          ? html`<${ModulePage} m=${MODULES[page]} idx=${page} S=${S} set=${set} done=${done} answers=${answers} onAnswer=${(id, i) => setAnswers(a => ({...a, [id]: i}))} go=${go}/>`
+          : html`<${Playground} S=${S} set=${set} go=${go}/>`}
+        <footer>Lens specs come from manufacturer pages and reviews (DxOMark, Cameralabs, mirrorlesscomparison.com). Middle-of-zoom apertures are estimated unless the lens lists exact steps. Depth of field, blur and exposure are simplified models meant for learning.</footer>
+      </main>
+    </div>
+  </div>`;
+}
+function specText(l){ return `${l.f[0]}${l.f[1] !== l.f[0] ? '-' + l.f[1] : ''}mm f/${fN(l.a[0])}${l.a[1] !== l.a[0] ? '-' + fN(l.a[1]) : ''}`; }
+
+render(html`<${App}/>`, document.getElementById('app'));
+
+</script>
+</body>
+</html>
