@@ -1,21 +1,48 @@
-MIT License
+Copyright (c) 2026 Yaswant Vishwakarma. All rights reserved.
 
-Copyright (c) 2026 Yaswant Vishwakarma
+Photography 101 ("the Software"), including its source code, text, design
+and content, is the property of Yaswant Vishwakarma.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+PERMISSIONS
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+You may view and use the Software through its published website for your
+own personal learning.
+
+You may NOT, without prior written permission from the copyright holder:
+  - copy, reproduce or republish the Software or any part of it;
+  - modify it or create derivative works based on it;
+  - distribute, sublicense, sell or host it elsewhere;
+  - use it for any commercial purpose.
+
+The source code being publicly visible does not grant any of these rights.
+
+EDUCATIONAL PURPOSE ONLY
+
+The Software is provided for learning purposes only. It is a simplified
+teaching aid and is not professional photography, optical or technical
+advice.
+
+DISCLAIMER OF ACCURACY
+
+Lens configurations, camera settings, values, formulas, simulations and
+other information in the Software may be simplified, approximate,
+incomplete or wrong. The copyright holder makes no guarantee of their
+accuracy and is not responsible for any errors or omissions in them, or for
+any decisions, purchases or results based on them. Check important details
+against the manufacturer's documentation or another reliable source.
+
+NO WARRANTY AND LIMITATION OF LIABILITY
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF ACCURACY,
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO
+EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OF OR OTHER
+DEALINGS IN THE SOFTWARE.
+
+THIRD-PARTY SOFTWARE
+
+The Software includes Preact and htm, which are licensed separately under
+the MIT License by their respective authors. Those components remain under
+their own licenses and are not covered by the restrictions above.
