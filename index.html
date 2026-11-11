@@ -89,6 +89,7 @@ ol.tasks li.active{outline:2px solid var(--accent)}
 button:disabled{opacity:.4;cursor:default}
 svg.diag{width:100%;max-width:520px;height:auto;display:block}
 footer{color:var(--muted);font-size:12.5px;margin-top:8px}
+footer .legal{margin:8px 0 0;padding-top:8px;border-top:1px solid var(--line)}
 </style>
 </head>
 <body>
@@ -792,7 +793,8 @@ function App(){
         ${page < MODULES.length
           ? html`<${ModulePage} m=${MODULES[page]} idx=${page} S=${S} set=${set} done=${done} answers=${answers} onAnswer=${(id, i) => setAnswers(a => ({...a, [id]: i}))} go=${go}/>`
           : html`<${Playground} S=${S} set=${set} go=${go}/>`}
-        <footer>Lens specs come from manufacturer pages and reviews (DxOMark, Cameralabs, mirrorlesscomparison.com). Middle-of-zoom apertures are estimated unless the lens lists exact steps. Depth of field, blur and exposure are simplified models meant for learning.</footer>
+        <footer>Lens specs come from manufacturer pages and reviews (DxOMark, Cameralabs, mirrorlesscomparison.com). Middle-of-zoom apertures are estimated unless the lens lists exact steps. Depth of field, blur and exposure are simplified models meant for learning.
+          <p class="legal">© 2026 Yaswant Vishwakarma. All rights reserved. For learning purposes only. Lens details and other information may contain errors and are not guaranteed to be accurate; check the manufacturer's specifications before relying on them.</p></footer>
       </main>
     </div>
   </div>`;
